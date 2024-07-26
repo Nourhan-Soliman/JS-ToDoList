@@ -10,6 +10,22 @@ let tasksCompleted = document.querySelector(".tasks-completed span");
 // Focus On Input Field
 window.onload = function () {
     theInput.focus();
+    
+    // Load tasks from local storage
+    if (window.localStorage.getItem('tasksContainer')) {
+        tasksContainer.innerHTML = window.localStorage.getItem('tasksContainer');
+    }
+    
+    // Calculate tasks after loading from local storage
+    calculateTasks();
+    
+    // Set counts from local storage
+    if (window.localStorage.getItem('tasksCount')) {
+        tasksCount.innerHTML = window.localStorage.getItem('tasksCount');
+    }
+    if (window.localStorage.getItem('tasksCompleted')) {
+        tasksCompleted.innerHTML = window.localStorage.getItem('tasksCompleted');
+    }
 };
 
 // Adding The Task
@@ -53,6 +69,11 @@ theAddButton.onclick = function () {
 
         // Recalculate tasks
         calculateTasks();
+        
+        // Save to Local Storage
+        window.localStorage.setItem('tasksContainer', tasksContainer.innerHTML);
+        window.localStorage.setItem('tasksCount', tasksCount.innerHTML);
+        window.localStorage.setItem('tasksCompleted', tasksCompleted.innerHTML);
     }
 };
 
@@ -64,17 +85,23 @@ document.addEventListener('click', function (e) {
         if (tasksContainer.childElementCount === 0) {
             createNoTasksMsg();
         }
-      
+        // Save to Local Storage
+        window.localStorage.setItem('tasksContainer', tasksContainer.innerHTML);
+        calculateTasks();
+        window.localStorage.setItem('tasksCount', tasksCount.innerHTML);
+        window.localStorage.setItem('tasksCompleted', tasksCompleted.innerHTML);
     }
 
     // Complete Task
     if (e.target.classList.contains('task-box')) {
         e.target.classList.toggle("finished");
         
-    }
-
-    // Recalculate tasks
+        // Save to Local Storage
+        window.localStorage.setItem('tasksContainer', tasksContainer.innerHTML);
         calculateTasks();
+        window.localStorage.setItem('tasksCount', tasksCount.innerHTML);
+        window.localStorage.setItem('tasksCompleted', tasksCompleted.innerHTML);
+    }
 });
 
 // Create and Append the "Delete All" Button 
@@ -96,6 +123,10 @@ deleteAllButton.onclick = function () {
     }
     // Recalculate tasks
     calculateTasks();
+    // Save to Local Storage
+    window.localStorage.setItem('tasksContainer', tasksContainer.innerHTML);
+    window.localStorage.setItem('tasksCount', tasksCount.innerHTML);
+    window.localStorage.setItem('tasksCompleted', tasksCompleted.innerHTML);
 };
 
 // Create and Append the "Finish All" Button 
@@ -109,7 +140,11 @@ app.appendChild(finishAllButton);
 finishAllButton.onclick = function () {
     let taskBoxes = tasksContainer.querySelectorAll('.task-box');
     taskBoxes.forEach(task => task.classList.toggle("finished"));
-   
+    // Save to Local Storage
+    window.localStorage.setItem('tasksContainer', tasksContainer.innerHTML);
+    calculateTasks();
+    window.localStorage.setItem('tasksCount', tasksCount.innerHTML);
+    window.localStorage.setItem('tasksCompleted', tasksCompleted.innerHTML);
 };
 
 // Function To Create No Tasks Message
@@ -138,8 +173,3 @@ function calculateTasks() {
     // Calculate Completed Tasks
     tasksCompleted.innerHTML = document.querySelectorAll('.tasks-content .finished').length;
 }
-
-// ###################################
-
-
-
